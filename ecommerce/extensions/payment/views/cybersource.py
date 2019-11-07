@@ -218,10 +218,11 @@ class CybersourceNotificationMixin(CyberSourceProcessorMixin, OrderCreationMixin
             # The problem is that orders are being created after payment processing, and the discount is not
             # saved in the database, so it needs to be calculated again in order to save the correct info to the
             # order. REVMI-124 will create the order before payment processing, when we have the discount context.
-            if waffle.flag_is_active(self.request, DYNAMIC_DISCOUNT_FLAG) and basket.lines.count() == 1:  # pragma: no cover  pylint: disable=line-too-long
+            # if waffle.flag_is_active(self.request, DYNAMIC_DISCOUNT_FLAG) and basket.lines.count() == 1:  # pragma: no cover  pylint: disable=line-too-long
+            if basket.lines.count() == 1:
                 discount_lms_url = get_lms_url('/api/discounts/')
                 lms_discount_client = EdxRestApiClient(discount_lms_url,
-                                                       jwt=self.request.site.siteconfiguration.access_token)
+                                                   jwt=self.request.site.siteconfiguration.access_token)
                 ck = basket.lines.first().product.course_id
                 user_id = basket.owner.lms_user_id
                 try:
@@ -263,7 +264,7 @@ class CybersourceNotificationMixin(CyberSourceProcessorMixin, OrderCreationMixin
             logger.warning(
                 'Could not get basket--error: [%s]',
                 str(error))
-            return None
+        return None
 
     def get_ids_from_notification(self, notification):
         transaction_id = notification.get('transaction_id')

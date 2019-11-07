@@ -249,11 +249,11 @@ class BasketLogicMixin(object):
 
         discount_jwt = None
         discount_percent = None
-        if waffle.flag_is_active(self.request, DYNAMIC_DISCOUNT_FLAG):
-            applied_offers = self.request.basket.applied_offers().values()
-            if len(applied_offers) == 1 and list(applied_offers)[0].condition.name == 'dynamic_discount_condition':
-                discount_jwt = self.request.GET.get('discount_jwt')
-                discount_percent = get_percentage_from_request()
+        # if waffle.flag_is_active(self.request, DYNAMIC_DISCOUNT_FLAG):
+        applied_offers = self.request.basket.applied_offers().values()
+        if len(applied_offers) == 1 and list(applied_offers)[0].condition.name == 'dynamic_discount_condition':
+            discount_jwt = self.request.GET.get('discount_jwt')
+            discount_percent = get_percentage_from_request()
         return {
             'total_benefit_object': total_benefit_object,
             'total_benefit': format_benefit_value(total_benefit_object) if total_benefit_object else None,
