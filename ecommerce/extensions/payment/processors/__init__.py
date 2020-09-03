@@ -24,6 +24,8 @@ class BasePaymentProcessor(six.with_metaclass(abc.ABCMeta, object)):  # pragma: 
     do_not_call_in_templates = True
 
     NAME = None
+    # The title will be used in user-facing templates
+    TITLE = None
 
     def __init__(self, site):
         super(BasePaymentProcessor, self).__init__()
